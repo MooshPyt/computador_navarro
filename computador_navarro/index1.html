@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gmail - Caixa de Entrada</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f1f3f4;
+}
+
+/* Header */
+header {
+  background: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Layout */
+.container {
+  display: flex;
+  height: calc(100vh - 50px);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+}
+
+.sidebar div {
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.sidebar div:hover {
+  background: #e8f0fe;
+}
+
+/* Email list */
+.email-list {
+  width: 350px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.email_item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.email_item:hover {
+  background: #f6f8fc;
+}
+
+/* NÃO LIDO */
+.email_item.unread {
+  background: #e8f0fe;
+  font-weight: bold;
+}
+
+/* LIDO */
+.email_item.read {
+  background: #fff;
+  font-weight: normal;
+}
+
+.email_item strong {
+  display: block;
+}
+
+.email_item span {
+  font-size: 13px;
+  color: #555;
+}
+
+/* Email view */
+.email-view {
+  flex: 1;
+  padding: 20px;
+  background: #fff;
+}
+
+.email-meta {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+</style>
+</head>
+
+<body>
+
+<header style="display: flex; justify-content: space-between; align-items: center;height: 10px;"><div>📧 Gmail</div> <a href="index.html">
+    <p style="background-color: red; color: white; padding: 2px; border-radius: 100px;">X</p>
+</a></header>
+
+<div class="container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div>📥 Caixa de entrada</div>
+    <div>⭐ Com estrela</div>
+    <div>📤 Enviados</div>
+    <div>🗑️ Lixeira</div>
+  </div>
+
+  <!-- Email list -->
+  <div class="email-list" id="emailList"></div>
+
+  <!-- Email view -->
+  <div class="email-view" id="emailView">
+    <h2>Selecione um email</h2>
+    <p>Escolha um email à esquerda para visualizar o conteúdo.</p>
+  </div>
+
+</div>
+
+<script>
+const emails = [
+  {
+    fromName: "Semana Acadêmica de Engenharia Biomédica",
+    subject: "Convite para Palestra — Semana Acadêmica de Engenharia Biomédica",
+    title: "Convite para Palestra — Semana Acadêmica de Engenharia Biomédica",
+    from: "LucasFerreira2000@gmail.com",
+    body: "Prezado Dr. Arthur Navarro,\n\nMeu nome é Lucas Ferreira e escrevo em nome da coordenação da Semana Acadêmica de Engenharia Biomédica da Universidade Estadual de Campinas.\n\nSeu trabalho no campo das próteses avançadas e da integração entre tecnologia e medicina é amplamente reconhecido por nossos docentes e alunos.\n\nGostaríamos de convidá-lo para ministrar uma palestra presencial ou remota, abordando sua trajetória profissional e os desafios atuais da engenharia protética.\n\nFicaremos honrados com sua participação e estamos à disposição para adequar datas e formato.\n\nAtenciosamente,\nLucas Ferreira\nCoordenação Acadêmica\nUniversidade Estadual de Campinas",
+    read: false
+  },
+  {
+    fromName: "Congresso Brasileiro de Ortopedia",
+    subject: "Convite para palestrar",
+    title: "Convite para Palestrar no Congresso Brasileiro de Ortopedia",
+    from: "Comissão Científica <comissao.cientifica@cbor.org.br>",
+    body: "Dr. Navarro,\n\nGostaríamos de contar com sua presença como palestrante no próximo Congresso Brasileiro de Ortopedia e Reabilitação.\n\nCordialmente,\nComissão Científica",
+    read: false
+  },
+  {
+    fromName: "Instituto Nacional de Pesquisa",
+    subject: "Ciclo de palestras em inovação",
+    title: "Ciclo de Palestras em Inovação Protética",
+    from: "Helena Duarte <helena.duarte@inpta.gov.br>",
+    body: "Dr. Arthur Navarro,\n\nO Instituto Nacional de Pesquisa em Tecnologia Assistiva convida o senhor para integrar nosso ciclo de palestras.\n\nAtenciosamente,\nHelena Duarte",
+    read: false
+  },
+  {
+    fromName: "Convite para Palestrante",
+    subject: "Congresso de Reabilitação e Próteses Avançadas",
+    title: "Convite para Palestrante - Congresso de Reabilitação e Próteses Avançadas",
+    from: "Michael Carter <m.carter@isap-symposium.org>",
+    body: "Dr. Arthur Navarro,\n\nÉ com grande satisfação que a Comissão Científica do Congresso Nacional de Reabilitação Funcional convida o senhor para participar como palestrante em nossa próxima edição.\n\nA palestra teria como foco os avanços recentes em próteses funcionais, limites éticos da experimentação e perspectivas futuras da área.\n\nO evento reunirá médicos, engenheiros biomédicos e pesquisadores de todo o país.\n\nAguardamos seu retorno para prosseguirmos com os detalhes.\n\nCordialmente,\nComissão Científica\nCongresso Nacional de Reabilitação Funcional",
+    read: true
+  },
+
+  {
+    fromName: "Subasta de Piezas Históricas",
+    subject: "Confirmación de Adjudicación — Subasta de Piezas Históricas",
+    title: "Confirmación de Adjudicación — Subasta de Piezas Históricas",
+    from: "subastachile@gmail.com",
+    body: "Estimado Dr. Arthur Navarro,\n\nPor medio del presente, nos complace confirmar que su oferta realizada en nuestra subasta especializada en piezas históricas y objetos antiguos fue adjudicada con éxito.\n\nA continuación, detallamos la información correspondiente a la operación: \n\nComprador: Arthur Navarro\nEvento: Subasta Internacional de Artefactos Históricos y Coleccionables Antiguos\nMonto total adjudicado: CLP $4.750.000\nEstado del pago: Confirmado\nFecha de la compra: 25 de julio de 2023 \n\nEl lote adquirido corresponde a un objeto catalogado como pieza histórica de colección, actualmente bajo resguardo de nuestro departamento de conservación. El embalaje especializado y la gestión de exportación serán iniciados en los próximos días, respetando las normativas vigentes para bienes patrimoniales. \n\nLa información detallada sobre el envío, así como la documentación legal y aduanera, será enviada en una comunicación posterior. \n\nAgradecemos su participación y el interés demostrado en nuestra subasta. Quedamos atentos ante cualquier consulta adicional.\n\nAtentamente,\nDepartamento de Subastas y Patrimonio\nCasa de Subastas Valparaíso \n República de Chile",
+    read: true
+  }
+  ,
+  {
+    fromName: "shopmais produto a caminho",
+    subject: "Seu pedido já está a caminho!",
+    title: "Seu pedido já está a caminho!",
+    from: "shopmais@gmail.com",
+    body: "Olá, Arthur Navarro,\n\nTemos boas notícias!\n\nSeu pedido nº 84739210 já foi enviado e está a caminho do endereço cadastrado.\n\n🚚 Transportadora: LogFast\n📍 Prazo estimado de entrega: 5 a 7 dias úteis\n\nVocê pode acompanhar o status do envio diretamente em nossa plataforma.\n\nObrigado por comprar conosco.\n\nEquipe ShopMais Brasil",
+    read: false
+  }
+  ,
+  {
+    fromName: "email completamente cannon que com certeza esta aqui",
+    subject: "nada suspeito aqui",
+    title: "shhhh",
+    from: "cassiano@gmail.com",
+    body: "manda o gaspar tomar no cu porfavor",
+    read: false
+  }
+    ,
+  {
+    fromName: "Confirmação de Compra de Imóvel",
+    subject: "Confirmação de Compra de Imóvel",
+    title: "Confirmação de Compra de Imóvel",
+    from: "imobiliariariberão@gmail.com",
+    body: "Prezado Dr. Arthur Navarro,\n\nPor meio deste, confirmamos a conclusão do processo de compra e registro do imóvel localizado na zona rural do município de Ribeirão Claro.\n\n📍 Localização: Estrada vicinal s/n — Área de mata, Ribeirão Claro / SP\n🏗️ Tipo de imóvel: Galpão isolado\n📐 Área construída: 480 m²\n📄 Situação cadastral: Regularizada\n💰 Valor da transação: R$ 310.000,00\n📅 Data de conclusão: 17/03/2020\n\nInformamos que a transferência de titularidade foi devidamente protocolada junto ao cartório responsável, não havendo pendências documentais até o momento.\n\nRessaltamos que, por se tratar de imóvel situado em área afastada do perímetro urbano, eventuais adequações estruturais ou de uso deverão observar as normas ambientais vigentes.\n\nPermanecemos à disposição para quaisquer esclarecimentos adicionais.\n\nAtenciosamente,\nRicardo Menezes\nDepartamento Imobiliário\nImóveis Vale Verde",
+    read: true
+  }
+];
+
+function renderEmails() {
+  const list = document.getElementById("emailList");
+  list.innerHTML = "";
+
+  emails.forEach((email, index) => {
+    const div = document.createElement("div");
+    div.className = `email_item ${email.read ? "read" : "unread"}`;
+    div.onclick = () => openEmail(index);
+
+    div.innerHTML = `
+      <strong>${email.fromName}</strong>
+      <span>${email.subject}</span>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+function openEmail(index) {
+  const email = emails[index];
+  email.read = true;
+
+  document.getElementById("emailView").innerHTML = `
+    <h2>${email.title}</h2>
+    <div class="email-meta">De: ${email.from}</div>
+    <p style="white-space: pre-line;">${email.body}</p>
+  `;
+
+  renderEmails();
+}
+
+renderEmails();
+</script>
+
+</body>
+</html>
