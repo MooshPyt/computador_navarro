@@ -1,9 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body{
     background-image: url("img/D3y4G.jpg");
       background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 96vh;
+    min-height: 96vh;
+    min-width: 100vh;
 }
 h1, h2, h3, h4, h5, h6, p{
     color: #ffffff;
@@ -19,6 +26,7 @@ h1, h2, h3, h4, h5, h6, p{
     font-family: Arial, Helvetica, sans-serif;
     color: #ffffff;
     cursor: pointer;
+    gap: 15px;
 }
 
 .app_img{
@@ -32,7 +40,7 @@ footer{
     position: absolute;
     margin-left: -10px;
     bottom: 0;
-    width: 195vh;
+    min-width: 100.5%;
     height: 35px;
     background-color: rgb(189, 188, 188);
 }
@@ -45,11 +53,18 @@ footer{
 }
 
 #lixeira{
-    display: flex;
-    flex-direction: column;
-    position: absolute; 
-    margin-left: 183vh;
-    margin-top: -27vh;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 9999;
 }
 
 #senhas{
@@ -71,8 +86,7 @@ hr{
 }
 
 #senhas_list{
-    margin-left: -10px;
-    margin-top: -10px;
+    margin: 10px;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
     overflow-y: auto;
@@ -86,6 +100,7 @@ hr{
 }
 
 #cabeçalhosenha{
+    margin-top: 9px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
