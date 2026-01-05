@@ -111,18 +111,8 @@ hr{
     margin-top: -1px;
 }
 
-/* NÃO LIDO */
-.email_item.unread {
-  background: #e8f0fe;
-  font-weight: bold;
-}
-
-/* LIDO */
-.email_item.read {
-  background: #fff;
-  font-weight: normal;
-}
-
 a{
     text-decoration: none;
+    width: 5px;
 }
+
